@@ -154,9 +154,18 @@ for row in engineschema:
         pre_position = numberidx-1
         post_position = numberidx+numberlen
         if (pre_position < 0): pre_position =0
-        if (post_position >= len(row)): post_position = len(row)-1
-        if row[pre_position] in symbols or row[post_position] in symbols:
+        if (post_position > len(row)): post_position = len(row)
+        
+        if row[pre_position] in symbols:
             symbolfound = True
+        if post_position == len(row):
+            lastchar = row[post_position-1]
+        else:
+            lastchar = row[post_position]
+            
+        if lastchar in symbols:
+            symbolfound = True       
+                
         rowabove = ""
         rowbelow = ""
         end = post_position+1
@@ -173,7 +182,7 @@ for row in engineschema:
             if char in symbols:
                 symbolfound= True
 
-        print(index,len(engineschema),thisnumber,pre_position,post_position,end,len(row), symbolfound)
+        print(index,thisnumber,row[pre_position],lastchar,rowabove,rowbelow,symbolfound)
                 
         if symbolfound:
             total = total+int(thisnumber)
