@@ -139,14 +139,31 @@ puzzleinput =""".........426.............985.........40..........207............
 ...............726.....308.............%........*...../.+........=..../146.................*...................509..........*........593....
 930.........................823..............994.................................100.....857.......................708.220.184.............."""
 
+puzzleinput = """12.......*..
++.........34
+.......-12..
+..78........
+..*....60...
+78..........
+.......23...
+....90*12...
+............
+2.2......12.
+.*.........*
+1.1.......56
+5.5.........
+...*........"""
+
 import re
 engineschema = puzzleinput.splitlines()
 symbols = set(re.sub("([0-9.\n]*)","",puzzleinput))
 total = 0
+print(puzzleinput)
 for row in engineschema:
     index = engineschema.index(row)
     rownumbers = re.findall(r'\d+',row)
-    print(row)
+    print(list(enumerate(rownumbers)))
+    numbercount = 0
     for thisnumber in rownumbers:
         symbolfound = False
         numberidx = row.index(thisnumber)
@@ -169,7 +186,7 @@ for row in engineschema:
         rowabove = ""
         rowbelow = ""
         end = post_position+1
-        if end >= len(row): 
+        if end > len(row): 
             end = post_position
         if index > 0:
             rowabove = engineschema[index-1][pre_position:end]
@@ -182,7 +199,7 @@ for row in engineschema:
             if char in symbols:
                 symbolfound= True
 
-        print(index,thisnumber,row[pre_position],lastchar,rowabove,rowbelow,symbolfound)
+        print(index,thisnumber,pre_position,row[pre_position],post_position,lastchar,rowabove,rowbelow,symbolfound)
                 
         if symbolfound:
             total = total+int(thisnumber)
