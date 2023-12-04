@@ -158,15 +158,30 @@ import re
 engineschema = puzzleinput.splitlines()
 symbols = set(re.sub("([0-9.\n]*)","",puzzleinput))
 total = 0
-print(puzzleinput)
 for row in engineschema:
     index = engineschema.index(row)
     rownumbers = re.findall(r'\d+',row)
-    print(list(enumerate(rownumbers)))
     numbercount = 0
-    for thisnumber in rownumbers:
+    numbersDict = {}
+    for idx, thisnumber in enumerate(rownumbers):
         symbolfound = False
-        numberidx = row.index(thisnumber)
+        
+        countNumbers = rownumbers.count(thisnumber)
+        if countNumbers == 1:
+            numberidx = row.find(thisnumber)
+        else:
+            if (numbersDict.get("thisnumber",False)):
+                numbersDict[thisnumber] = 1
+            else:
+                numbersDict[thisnumber] = numbersDict[thisnumber]+1
+            
+        workingIndex = -1
+        start = 0
+        while workingIndex < idx:
+            numberidx = row.find(thisnumber,start)
+            workingIndex = workingIndex+1
+            start=numberidx+len(thisnumber)
+            
         numberlen = len(thisnumber)
         pre_position = numberidx-1
         post_position = numberidx+numberlen
@@ -199,7 +214,7 @@ for row in engineschema:
             if char in symbols:
                 symbolfound= True
 
-        print(index,thisnumber,pre_position,row[pre_position],post_position,lastchar,rowabove,rowbelow,symbolfound)
+        print(index,thisnumber,numberidx,pre_position,row[pre_position],post_position,lastchar,rowabove,rowbelow,symbolfound)
                 
         if symbolfound:
             total = total+int(thisnumber)
